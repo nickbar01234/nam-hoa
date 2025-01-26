@@ -1,0 +1,58 @@
+import { useCart } from "@/hooks";
+import { groupByCategory } from "@/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Item from "./item";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import React from "react";
+
+const Menu = () => {
+  const { menu } = useCart();
+  const menuByCategory = groupByCategory(menu);
+
+  const categoryRefs = React.useRef<Record<string, HTMLButtonElement | null>>(
+    {}
+  );
+
+  return (
+    <Tabs defaultValue={Object.keys(menuByCategory)[0]} className="relative">
+      <div className="mb-32">
+        {Object.entries(menuByCategory).map(([category, items]) => (
+          <TabsContent
+            key={category}
+            value={category}
+            className="px-4 grid grid-cols-12 gap-x-4 gap-y-6 mt-0 overflow-auto"
+          >
+            {(items ?? []).map((item) => (
+              <Item key={item.name} item={item} />
+            ))}
+          </TabsContent>
+        ))}
+      </div>
+      <TabsList className="w-full flex gap-x-4 bg-white min-h-fit px-8 fixed bottom-0 z-50 shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] border-t py-3">
+        <ScrollArea className="whitespace-nowrap w-full hide-scrollbar">
+          <div className="flex gap-x-4">
+            {Object.keys(menuByCategory).map((category) => (
+              <TabsTrigger
+                ref={(node) => {
+                  categoryRefs.current[category] = node;
+                }}
+                key={category}
+                value={category}
+                className="data-[state=active]:bg-[#BD1E2D] data-[state=active]:text-white px-4 py-2 bg-[#E5E5E5] rounded-md"
+                onClick={() => {
+                  const ref = categoryRefs.current[category];
+                  if (ref != null) ref.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                {category}
+              </TabsTrigger>
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      </TabsList>
+    </Tabs>
+  );
+};
+
+export default Menu;
