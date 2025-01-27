@@ -17,6 +17,13 @@ export interface MenuItem {
   options: Option[];
 }
 
+export interface CartItem extends Pick<MenuItem, "category" | "name"> {
+  quantity: number;
+  selection: Record<string, string[]>;
+}
+
+export type Cart = CartItem[];
+
 export type Menu = MenuItem[];
 
 export interface Restaurant {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import type { MenuItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,31 +18,46 @@ import { Separator } from "@/components/ui/separator";
 import ItemController, { useItem } from "./ItemController";
 import Option from "./Option";
 import React from "react";
+import { useCart } from "@/hooks";
 
 interface MenuItemProps {
   item: MenuItem;
 }
 
 const _Item = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { item, quantity, adjustQuantity, canSubmit, onSubmit } = useItem();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { summarizeCart } = useCart();
+  const { item, cart, adjustQuantity, canSubmit, onSubmit, onClose } =
+    useItem();
   const sheetCloseRef = React.useRef<HTMLButtonElement | null>(null);
+  const { quantity } = cart;
+  const { count: inCartQuantity } = summarizeCart(item);
 
   return (
-    <Sheet>
+    <Sheet
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <SheetClose className="hidden" ref={sheetCloseRef} />
       <SheetTrigger asChild>
-        <Button className="absolute bottom-[8px] right-[8px] bg-[#F5F5F5] rounded-full h-8 w-8 hover:bg-gray-900/90 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2">
-          <FontAwesomeIcon icon={faPlus} color="#000000DE" />
+        <Button
+          className="absolute bottom-[8px] right-[8px] rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out
+            hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5]
+            disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1] font-semibold"
+        >
+          {inCartQuantity > 0 ? (
+            inCartQuantity
+          ) : (
+            <FontAwesomeIcon icon={faPlus} color="#000000DE" />
+          )}
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="h-5/6 p-0 flex flex-col">
         <ScrollArea
-          className="overflow-auto hide-scrollbar pb-24"
+          className="overflow-auto hide-scrollbar pb-28"
           type="scroll"
         >
-          <div className="relative h-[186px]">
+          <div className="relative md:h-[400px] h-[186px]">
             <Image src={item.url} fill alt={item.name} objectFit="cover" />
           </div>
           <div className="p-4 flex flex-col gap-y-2">
@@ -63,9 +79,11 @@ const _Item = () => {
               ))}
             </div>
           </div>
+        </ScrollArea>
+        <div className="absolute bottom-0 w-full flex flex-col gap-y-2 h-fit bg-white border-t shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] py-3 px-6">
           <div className="flex gap-x-4 justify-center items-center">
             <Button
-              className="bg-[#F5F5F5] rounded-full h-8 w-8 hover:bg-gray-900/90 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
               onClick={() => adjustQuantity(-1)}
               disabled={quantity === 1}
             >
@@ -73,17 +91,15 @@ const _Item = () => {
             </Button>
             <span className="text-black font-semibold">{quantity}</span>
             <Button
-              className="bg-[#F5F5F5] rounded-full h-8 w-8 hover:bg-gray-900/90 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2"
+              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
               onClick={() => adjustQuantity(1)}
             >
               <FontAwesomeIcon icon={faPlus} color="#000000DE" />
             </Button>
           </div>
-        </ScrollArea>
-        <div className="absolute bottom-0 w-full flex flex-col gap-y-2 h-fit bg-white border-t shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] py-3">
           <div className="w-full flex justify-center">
             <Button
-              className="bg-[#2E3A85] py-3 px-12"
+              className="bg-[#2E3A85] text-white transition duration-300 ease-in-out hover:bg-[#405F9A] focus:bg-[#405F9A] focus:ring-2 focus:ring-offset-2 focus:ring-[#405F9A] py-3 px-12 w-full"
               size="lg"
               disabled={!canSubmit}
               onClick={() => {
@@ -105,8 +121,8 @@ const _Item = () => {
 
 const Item = ({ item }: MenuItemProps) => {
   return (
-    <div className="col-span-6 flex flex-col gap-y-2">
-      <div className="relative w-full h-[162px] rounded-md overflow-hidden shadow-lg">
+    <div className="flex flex-col gap-y-2">
+      <div className="relative w-full xl:h-[240px] lg:h-[200px] md:h-[180px] h-[162px] rounded-md overflow-hidden shadow-lg">
         <Image src={item.url} fill alt={item.name} />
         <ItemController item={item}>
           <_Item />

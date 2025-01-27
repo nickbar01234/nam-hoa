@@ -1,4 +1,4 @@
-import { Menu, MenuItem, OptionType } from "@/types";
+import { Cart, CartItem, Menu, MenuItem, OptionType } from "@/types";
 
 const formatter = new Intl.NumberFormat("en-US", {
   currency: "VND",
@@ -18,3 +18,19 @@ export const groupByOptionType = (options: MenuItem["options"]) =>
     (acc, option) => ({ ...acc, [option.label]: option.type }),
     {}
   );
+
+export const stringifyCartItem = (item: CartItem) => {
+  const stringifySelection = (selection: CartItem["selection"]) => {
+    return Object.keys(selection)
+      .sort()
+      .map((type) => {
+        const choices = selection[type] ?? [];
+        return `${type}[${choices.sort().join(",")}]`;
+      })
+      .join("-");
+  };
+  return `${item.category}-${item.name}-${stringifySelection(item.selection)}`;
+};
+
+export const isSameCartItem = (item1: CartItem, item2: CartItem) =>
+  stringifyCartItem(item1) === stringifyCartItem(item2);

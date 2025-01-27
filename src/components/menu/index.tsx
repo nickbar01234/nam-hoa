@@ -20,10 +20,15 @@ const Menu = () => {
           <TabsContent
             key={category}
             value={category}
-            className="px-4 grid grid-cols-12 gap-x-4 gap-y-6 mt-0 overflow-auto"
+            className="px-4 grid grid-cols-12 gap-x-4 gap-y-4 mt-0 overflow-auto"
           >
             {(items ?? []).map((item) => (
-              <Item key={item.name} item={item} />
+              <div
+                key={item.name}
+                className="xl:col-span-2 lg:col-span-3 md:col-span-4 col-span-6"
+              >
+                <Item key={item.name} item={item} />
+              </div>
             ))}
           </TabsContent>
         ))}

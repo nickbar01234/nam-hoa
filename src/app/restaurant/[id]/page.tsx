@@ -3,10 +3,9 @@
 import Menu from "@/components/menu";
 import { RESTAURANTS } from "@/constants/mock";
 import CartProvider from "@/context/CartProvider";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useParams } from "next/navigation";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import Cart from "@/components/cart";
 
 const Page = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,11 +23,7 @@ const Page = () => {
                 Noodles & Asian Kitchen
               </p>
             </div>
-            <FontAwesomeIcon
-              icon={faShoppingCart}
-              color="#00000099"
-              size="lg"
-            />
+            <Cart />
           </div>
           <Menu />
         </div>
