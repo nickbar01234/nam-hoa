@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export enum OptionType {
   SINGLE_CHOICE,
 }
@@ -32,3 +34,18 @@ export interface Restaurant {
 }
 
 export type Restaurants = Record<string, Restaurant>;
+
+export enum OrderStatus {
+  PENDING,
+  IN_PROGRESS,
+  DONE,
+}
+
+export interface Order {
+  table: string;
+  status: OrderStatus;
+  cart: Cart;
+  timestamp?: Timestamp;
+}
+
+export type Orders = Order[];

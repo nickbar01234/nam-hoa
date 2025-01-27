@@ -1,15 +1,19 @@
-import { Cart, CartItem, Menu, MenuItem } from "@/types";
+import { addOrder } from "@/db";
+import { useApiThrottle } from "@/hooks";
+import { Cart, CartItem, Menu, MenuItem, Order, OrderStatus } from "@/types";
 import { isSameCartItem } from "@/utils";
 import React from "react";
 
 interface CartProviderProps {
   children?: React.ReactNode;
   menu: Menu;
+  table: string;
 }
 
 interface CartProviderContext {
   cart: Cart;
   menu: Menu;
+  order: () => void;
   getMenuItem: (category: string, name: string) => MenuItem;
   addToCart: (item: CartItem) => void;
   summarizeCart: (item?: MenuItem) => { count: number; total: number };
@@ -18,8 +22,14 @@ interface CartProviderContext {
 const cartProviderContext = React.createContext({} as CartProviderContext);
 
 const Provider = cartProviderContext.Provider;
-const CartProvider = ({ children, menu }: CartProviderProps) => {
+const CartProvider = ({ children, table, menu }: CartProviderProps) => {
   const [cart, setCart] = React.useState<Cart>([]);
+  const { fn: order } = useApiThrottle({
+    fn: async () => {
+      addOrder({ table, status: OrderStatus.PENDING, cart });
+      setCart([]);
+    },
+  });
 
   const getMenuItem = (category: string, name: string) => {
     const maybeMenuItem = menu.find(
@@ -72,6 +82,7 @@ const CartProvider = ({ children, menu }: CartProviderProps) => {
         menu,
         getMenuItem,
         summarizeCart,
+        order,
       }}
     >
       {children}
