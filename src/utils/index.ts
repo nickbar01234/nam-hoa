@@ -1,4 +1,4 @@
-import { Cart, CartItem, Menu, MenuItem, OptionType } from "@/types";
+import { CartItem, Menu, MenuItem, OptionType } from "@/types";
 
 const formatter = new Intl.NumberFormat("en-US", {
   currency: "VND",
