@@ -51,7 +51,10 @@ const _Item = () => {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-5/6 p-0 flex flex-col">
+      <SheetContent
+        side="bottom"
+        className="h-5/6 p-0 flex flex-col [&>button:first-child]:hidden"
+      >
         <ScrollArea
           className="overflow-auto hide-scrollbar pb-28"
           type="scroll"
