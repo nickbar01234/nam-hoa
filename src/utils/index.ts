@@ -1,4 +1,12 @@
-import { CartItem, Menu, MenuItem, OptionType } from "@/types";
+import {
+  Cart,
+  CartItem,
+  IdentifiableOrders,
+  Menu,
+  MenuItem,
+  OptionType,
+  OrderStatus,
+} from "@/types";
 
 const formatter = new Intl.NumberFormat("en-US", {
   currency: "VND",
@@ -19,6 +27,12 @@ export const groupByOptionType = (options: MenuItem["options"]) =>
     {}
   );
 
+export const groupByOrderStatus = (orders: IdentifiableOrders) =>
+  orders.reduce((acc, order) => {
+    acc[order.status] = [...(acc[order.status] ?? []), order];
+    return acc;
+  }, {} as Record<OrderStatus, IdentifiableOrders>);
+
 export const stringifyCartItem = (item: CartItem) => {
   const stringifySelection = (selection: CartItem["selection"]) => {
     return Object.keys(selection)
@@ -34,3 +48,17 @@ export const stringifyCartItem = (item: CartItem) => {
 
 export const isSameCartItem = (item1: CartItem, item2: CartItem) =>
   stringifyCartItem(item1) === stringifyCartItem(item2);
+
+export const mergeCarts = (carts: Cart[]) => {
+  return carts
+    .flatMap((cart) => cart)
+    .reduce((acc, cart) => {
+      const idx = acc.findIndex((c) => isSameCartItem(c, cart));
+      if (idx >= 0) {
+        acc[idx] = { ...acc[idx], quantity: acc[idx].quantity + cart.quantity };
+        return acc;
+      } else {
+        return [...acc, cart];
+      }
+    }, [] as Cart);
+};

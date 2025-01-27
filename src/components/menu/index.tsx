@@ -20,7 +20,7 @@ const Menu = () => {
           <TabsContent
             key={category}
             value={category}
-            className="px-4 grid grid-cols-12 gap-x-4 gap-y-4 mt-0 overflow-auto"
+            className="px-4 grid grid-cols-12 gap-4 mt-0 overflow-auto"
           >
             {(items ?? []).map((item) => (
               <div
@@ -35,7 +35,7 @@ const Menu = () => {
       </div>
       <TabsList className="w-full flex gap-x-4 bg-white min-h-fit px-8 fixed bottom-0 z-50 shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] border-t py-3">
         <ScrollArea className="whitespace-nowrap w-full">
-          <div className="flex gap-x-4">
+          <div className="flex gap-x-4 justify-center">
             {Object.keys(menuByCategory).map((category) => (
               <TabsTrigger
                 ref={(node) => {
