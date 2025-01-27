@@ -34,7 +34,7 @@ const Menu = () => {
         ))}
       </div>
       <TabsList className="w-full flex gap-x-4 bg-white min-h-fit px-8 fixed bottom-0 z-50 shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] border-t py-3">
-        <ScrollArea className="whitespace-nowrap w-full hide-scrollbar">
+        <ScrollArea className="whitespace-nowrap w-full">
           <div className="flex gap-x-4">
             {Object.keys(menuByCategory).map((category) => (
               <TabsTrigger
@@ -53,7 +53,7 @@ const Menu = () => {
               </TabsTrigger>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar orientation="horizontal" className="hidden" />
         </ScrollArea>
       </TabsList>
     </Tabs>

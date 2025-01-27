@@ -43,14 +43,16 @@ const CartItem = ({ item }: CartItemProps) => {
       </div>
       <div className="self-end flex gap-x-4 items-center">
         <Button
-          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
+          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+          onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
           onClick={() => addToCart({ ...item, quantity: -1 })}
         >
           <FontAwesomeIcon icon={faMinus} color="#000000DE" />
         </Button>
         <span className="text-black font-semibold">{item.quantity}</span>
         <Button
-          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
+          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+          onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
           onClick={() => addToCart({ ...item, quantity: 1 })}
         >
           <FontAwesomeIcon icon={faPlus} color="#000000DE" />

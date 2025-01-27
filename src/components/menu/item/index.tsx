@@ -41,9 +41,8 @@ const _Item = () => {
       <SheetClose className="hidden" ref={sheetCloseRef} />
       <SheetTrigger asChild>
         <Button
-          className="absolute bottom-[8px] right-[8px] rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out
-            hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5]
-            disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1] font-semibold"
+          className="absolute bottom-[8px] right-[8px] rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out font-semibold"
+          onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
         >
           {inCartQuantity > 0 ? (
             inCartQuantity
@@ -83,7 +82,8 @@ const _Item = () => {
         <div className="absolute bottom-0 w-full flex flex-col gap-y-2 h-fit bg-white border-t shadow-[rgba(50,50,50,0.75)_0px_10px_15px_0px] py-3 px-6">
           <div className="flex gap-x-4 justify-center items-center">
             <Button
-              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
+              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+              onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
               onClick={() => adjustQuantity(-1)}
               disabled={quantity === 1}
             >
@@ -91,7 +91,8 @@ const _Item = () => {
             </Button>
             <span className="text-black font-semibold">{quantity}</span>
             <Button
-              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out hover:bg-[#E0E0E0] hover:border-[#A5A5A5] focus:bg-[#E0E0E0] focus:border-[#A5A5A5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A5A5A5] disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed disabled:hover:bg-[#E0E0E0] disabled:hover:border-[#B1B1B1]"
+              className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+              onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
               onClick={() => adjustQuantity(1)}
             >
               <FontAwesomeIcon icon={faPlus} color="#000000DE" />
@@ -99,9 +100,10 @@ const _Item = () => {
           </div>
           <div className="w-full flex justify-center">
             <Button
-              className="bg-[#2E3A85] text-white transition duration-300 ease-in-out hover:bg-[#405F9A] focus:bg-[#405F9A] focus:ring-2 focus:ring-offset-2 focus:ring-[#405F9A] py-3 px-12 w-full"
+              className="bg-[#2E3A85] text-white transition duration-300 ease-in-out py-3 px-12 w-full"
               size="lg"
               disabled={!canSubmit}
+              onTouch="hover:bg-[#1C2C63] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[#1C2C63] focus:ring-offset-2"
               onClick={() => {
                 onSubmit();
                 const ref = sheetCloseRef.current;

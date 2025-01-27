@@ -70,6 +70,7 @@ const Cart = () => {
           <div className="w-full flex justify-center">
             <Button
               className="bg-[#2E3A85] text-white transition duration-300 ease-in-out hover:bg-[#405F9A] focus:bg-[#405F9A] focus:ring-2 focus:ring-offset-2 focus:ring-[#405F9A] py-3 px-12 w-full"
+              onTouch="hover:bg-[#1C2C63] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[#1C2C63] focus:ring-offset-2"
               size="lg"
             >
               Gọi món
