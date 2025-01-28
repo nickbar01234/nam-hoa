@@ -9,9 +9,10 @@ import { faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 
 interface CartItemProps {
   item: CartItem;
+  editable: boolean;
 }
 
-const CartItem = ({ item }: CartItemProps) => {
+const CartItem = ({ item, editable }: CartItemProps) => {
   const { getMenuItem, addToCart } = useCart();
   const menuItem = getMenuItem(item.category, item.name);
 
@@ -41,23 +42,25 @@ const CartItem = ({ item }: CartItemProps) => {
           <span>{formatPriceInVnd(menuItem.price * item.quantity)}</span>
         </div>
       </div>
-      <div className="self-end flex gap-x-4 items-center">
-        <Button
-          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
-          onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
-          onClick={() => addToCart({ ...item, quantity: -1 })}
-        >
-          <FontAwesomeIcon icon={faMinus} color="#000000DE" />
-        </Button>
-        <span className="text-black font-semibold">{item.quantity}</span>
-        <Button
-          className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
-          onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
-          onClick={() => addToCart({ ...item, quantity: 1 })}
-        >
-          <FontAwesomeIcon icon={faPlus} color="#000000DE" />
-        </Button>
-      </div>
+      {editable && (
+        <div className="self-end flex gap-x-4 items-center">
+          <Button
+            className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+            onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
+            onClick={() => addToCart({ ...item, quantity: -1 })}
+          >
+            <FontAwesomeIcon icon={faMinus} color="#000000DE" />
+          </Button>
+          <span className="text-black font-semibold">{item.quantity}</span>
+          <Button
+            className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
+            onTouch="hover:bg-[#E0E0E0] hover:border-[#B1B1B1] hover:text-[#B1B1B1] focus:outline-none focus:ring-2 focus:ring-[#B1B1B1] focus:ring-offset-2"
+            onClick={() => addToCart({ ...item, quantity: 1 })}
+          >
+            <FontAwesomeIcon icon={faPlus} color="#000000DE" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

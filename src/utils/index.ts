@@ -62,3 +62,28 @@ export const mergeCarts = (carts: Cart[]) => {
       }
     }, [] as Cart);
 };
+
+export const getMenuItem = (menu: Menu, category: string, name: string) => {
+  const maybeMenuItem = menu.find(
+    (item) => item.category === category && item.name === name
+  );
+  if (maybeMenuItem == undefined)
+    throw new Error(`Can't find ${category}-${name} from ${menu}`);
+  return maybeMenuItem;
+};
+
+export const summarizeCart = (menu: Menu, cart: Cart, item?: MenuItem) => {
+  const cartForItem = cart.filter((c) =>
+    item == undefined
+      ? true
+      : item.category === c.category && item.name === c.name
+  );
+  const count = cartForItem
+    .map((c) => c.quantity)
+    .reduce((acc, quantity) => acc + quantity, 0);
+  const total = cartForItem.reduce((acc, c) => {
+    const item = getMenuItem(menu, c.category, c.name);
+    return acc + item.price * c.quantity;
+  }, 0);
+  return { count, total };
+};

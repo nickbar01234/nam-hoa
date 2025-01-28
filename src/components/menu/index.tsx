@@ -1,4 +1,4 @@
-import { useCart } from "@/hooks";
+import { useRestaurant } from "@/hooks";
 import { groupByCategory } from "@/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Item from "./item";
@@ -6,7 +6,9 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import React from "react";
 
 const Menu = () => {
-  const { menu } = useCart();
+  const {
+    restaurant: { menu },
+  } = useRestaurant();
   const menuByCategory = groupByCategory(menu);
 
   const categoryRefs = React.useRef<Record<string, HTMLButtonElement | null>>(
@@ -20,7 +22,7 @@ const Menu = () => {
           <TabsContent
             key={category}
             value={category}
-            className="px-4 grid grid-cols-12 gap-4 mt-0 overflow-auto"
+            className="px-4 grid grid-cols-12 gap-4 mt-0"
           >
             {(items ?? []).map((item) => (
               <div

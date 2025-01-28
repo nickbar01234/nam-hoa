@@ -1,6 +1,6 @@
-import { deleteOrders, listenForOrders } from "@/db";
+import { deleteOrders, listenForOrders, setOrder } from "@/db";
 import { useOnMount } from "@/hooks";
-import { IdentifiableOrders, Order, OrderStatus } from "@/types";
+import { IdentifiableOrders, Menu, Order, OrderStatus } from "@/types";
 import { mergeCarts } from "@/utils";
 import React from "react";
 
@@ -10,6 +10,7 @@ interface OrderProviderProps {
 
 interface OrderProviderContext {
   orders: IdentifiableOrders;
+  updateOrderStatus: (id: string, status: OrderStatus) => Promise<void>;
 }
 
 const orderProviderContext = React.createContext({} as OrderProviderContext);
@@ -74,7 +75,12 @@ const OrderProvider = ({ children }: OrderProviderProps) => {
     return () => unsubscribe();
   });
 
-  return <Provider value={{ orders }}>{children}</Provider>;
+  const updateOrderStatus = async (id: string, status: OrderStatus) => {
+    const order = orders.find((order) => order.id === id);
+    if (order != undefined) await setOrder({ ...order, status });
+  };
+
+  return <Provider value={{ orders, updateOrderStatus }}>{children}</Provider>;
 };
 
 export default OrderProvider;

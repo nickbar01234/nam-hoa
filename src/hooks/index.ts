@@ -1,6 +1,9 @@
 import { cartProviderContext } from "@/context/CartProvider";
 import { orderProviderContext } from "@/context/OrderProvider";
+import { restaurantProviderContext } from "@/context/RestaurantProvider";
 import React from "react";
+
+export const useRestaurant = () => React.useContext(restaurantProviderContext);
 
 export const useCart = () => React.useContext(cartProviderContext);
 

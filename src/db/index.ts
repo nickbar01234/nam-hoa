@@ -1,4 +1,4 @@
-import { Order } from "@/types";
+import { IdentifiableOrder, Order } from "@/types";
 import { initializeApp } from "firebase/app";
 import {
   addDoc,
@@ -7,13 +7,14 @@ import {
   serverTimestamp,
   onSnapshot,
   QuerySnapshot,
-  DocumentData,
-  deleteDoc,
   doc,
   writeBatch,
+  orderBy,
+  query,
+  updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { orderConverter } from "./converter";
-import React from "react";
 
 const app = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
@@ -31,6 +32,12 @@ export const addOrder = async (order: Order) => {
   await addDoc(ref, { ...order, timestamp: serverTimestamp() });
 };
 
+export const setOrder = async (order: IdentifiableOrder) => {
+  const ref = doc(db, "orders", order.id).withConverter(orderConverter);
+  const { id, ...rest } = order;
+  await setDoc(ref, rest);
+};
+
 export const deleteOrders = async (ids: string[]) => {
   if (ids.length > 0) {
     const batch = writeBatch(db);
@@ -41,4 +48,11 @@ export const deleteOrders = async (ids: string[]) => {
 
 export const listenForOrders = (
   cb: (docs: QuerySnapshot<Order, Order>) => void
-) => onSnapshot(collection(db, "orders").withConverter(orderConverter), cb);
+) =>
+  onSnapshot(
+    query(
+      collection(db, "orders").withConverter(orderConverter),
+      orderBy("timestamp", "asc")
+    ),
+    cb
+  );

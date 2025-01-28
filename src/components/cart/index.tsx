@@ -15,7 +15,21 @@ import { formatPriceInVnd, stringifyCartItem } from "@/utils";
 import React from "react";
 import { Button } from "@/components/ui/button";
 
-const Cart = () => {
+interface CartProps {
+  submitLabel?: string;
+  leftIcon?: React.ReactNode;
+  defaultOpen?: boolean;
+  editable?: boolean;
+  sheetOpenRef?: React.RefObject<HTMLButtonElement | null>;
+}
+
+const Cart = ({
+  submitLabel,
+  leftIcon,
+  defaultOpen,
+  editable = true,
+  sheetOpenRef,
+}: CartProps) => {
   const { cart, summarizeCart, order } = useCart();
   const { count, total } = summarizeCart();
   const sheetCloseRef = React.useRef<HTMLButtonElement | null>(null);
@@ -26,11 +40,12 @@ const Cart = () => {
   }, [count]);
 
   return (
-    <Sheet>
+    <Sheet defaultOpen={defaultOpen ?? false}>
       <SheetClose className="hidden" ref={sheetCloseRef} />
       <SheetTrigger
         disabled={count === 0}
         className="text-black disabled:text-[#00000099]"
+        ref={sheetOpenRef}
       >
         <div className="relative flex justify-center">
           <div className="absolute -top-3 -right-3 z-50 bg-[#BD1E2D] text-white rounded-full h-6 w-6 text-sm flex items-center justify-center p-1">
@@ -43,8 +58,9 @@ const Cart = () => {
         side="bottom"
         className="h-5/6 p-0 flex flex-col gap-y-4 [&>button:first-child]:hidden"
       >
-        <SheetTitle className="text-2xl shadow-xl py-3 px-4 text-[#171717] font-medium">
-          Giỏ Hàng
+        <SheetTitle className="flex justify-between items-center text-2xl shadow-xl py-3 px-4 text-[#171717] font-medium">
+          <span>Giỏ Hàng</span>
+          {leftIcon ?? null}
         </SheetTitle>
         <ScrollArea
           className="overflow-auto hide-scrollbar pb-24"
@@ -56,7 +72,7 @@ const Cart = () => {
                 key={stringifyCartItem(item)}
                 className="flex flex-col gap-y-4"
               >
-                <CartItem item={item} />
+                <CartItem item={item} editable={editable ?? true} />
                 <Separator className="border-[1px] text-[#D4D4D4]" />
               </div>
             ))}
@@ -68,14 +84,16 @@ const Cart = () => {
             <p>{formatPriceInVnd(total)}</p>
           </div>
           <div className="w-full flex justify-center">
-            <Button
-              className="bg-[#2E3A85] text-white transition duration-300 ease-in-out hover:bg-[#405F9A] focus:bg-[#405F9A] focus:ring-2 focus:ring-offset-2 focus:ring-[#405F9A] py-3 px-12 w-full"
-              onTouch="hover:bg-[#1C2C63] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[#1C2C63] focus:ring-offset-2"
-              size="lg"
-              onClick={order}
-            >
-              Gọi món
-            </Button>
+            {editable && (
+              <Button
+                className="bg-[#2E3A85] text-white transition duration-300 ease-in-out hover:bg-[#405F9A] focus:bg-[#405F9A] focus:ring-2 focus:ring-offset-2 focus:ring-[#405F9A] py-3 px-12 w-full"
+                onTouch="hover:bg-[#1C2C63] hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-[#1C2C63] focus:ring-offset-2"
+                size="lg"
+                onClick={order}
+              >
+                {submitLabel ?? "Gọi món"}
+              </Button>
+            )}
           </div>
         </div>
       </SheetContent>

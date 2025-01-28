@@ -1,18 +1,22 @@
 import { addOrder } from "@/db";
-import { useApiThrottle } from "@/hooks";
+import { useApiThrottle, useRestaurant } from "@/hooks";
 import { Cart, CartItem, Menu, MenuItem, Order, OrderStatus } from "@/types";
-import { isSameCartItem } from "@/utils";
+import {
+  isSameCartItem,
+  getMenuItem as getMenuItemImpl,
+  summarizeCart as summarizeCartImpl,
+} from "@/utils";
 import React from "react";
 
 interface CartProviderProps {
   children?: React.ReactNode;
-  menu: Menu;
   table: string;
+  cart?: Cart;
+  onSubmit: (cart: Cart) => void;
 }
 
 interface CartProviderContext {
   cart: Cart;
-  menu: Menu;
   order: () => void;
   getMenuItem: (category: string, name: string) => MenuItem;
   addToCart: (item: CartItem) => void;
@@ -22,23 +26,25 @@ interface CartProviderContext {
 const cartProviderContext = React.createContext({} as CartProviderContext);
 
 const Provider = cartProviderContext.Provider;
-const CartProvider = ({ children, table, menu }: CartProviderProps) => {
-  const [cart, setCart] = React.useState<Cart>([]);
+const CartProvider = ({
+  children,
+  table,
+  cart: providedCart,
+  onSubmit,
+}: CartProviderProps) => {
+  const {
+    restaurant: { menu },
+  } = useRestaurant();
+  const [cart, setCart] = React.useState<Cart>(providedCart ?? []);
   const { fn: order } = useApiThrottle({
     fn: async () => {
-      addOrder({ table, status: OrderStatus.PENDING, cart });
+      onSubmit(cart);
       setCart([]);
     },
   });
 
-  const getMenuItem = (category: string, name: string) => {
-    const maybeMenuItem = menu.find(
-      (item) => item.category === category && item.name === name
-    );
-    if (maybeMenuItem == undefined)
-      throw new Error(`Can't find ${category}-${name} from ${menu}`);
-    return maybeMenuItem;
-  };
+  const getMenuItem = (category: string, name: string) =>
+    getMenuItemImpl(menu, category, name);
 
   const addToCart = (item: CartItem) =>
     setCart((prev) => {
@@ -58,28 +64,14 @@ const CartProvider = ({ children, table, menu }: CartProviderProps) => {
       }
     });
 
-  const summarizeCart = (item?: MenuItem) => {
-    const cartForItem = cart.filter((c) =>
-      item == undefined
-        ? true
-        : item.category === c.category && item.name === c.name
-    );
-    const count = cartForItem
-      .map((c) => c.quantity)
-      .reduce((acc, quantity) => acc + quantity, 0);
-    const total = cartForItem.reduce((acc, c) => {
-      const item = getMenuItem(c.category, c.name);
-      return acc + item.price * c.quantity;
-    }, 0);
-    return { count, total };
-  };
+  const summarizeCart = (item?: MenuItem) =>
+    summarizeCartImpl(menu, cart, item);
 
   return (
     <Provider
       value={{
         cart,
         addToCart,
-        menu,
         getMenuItem,
         summarizeCart,
         order,
