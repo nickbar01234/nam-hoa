@@ -18,7 +18,7 @@ const CartItem = ({ item, editable }: CartItemProps) => {
 
   return (
     <div className="flex flex-col gap-y-4 px-4">
-      <div className="flex justify-between transition duration-300 ease-in-out">
+      <div className="flex justify-between transition duration-300 ease-in-out items-center">
         <div className="flex items-center gap-x-2">
           <div className="relative h-[40px] w-[40px]">
             <Image
