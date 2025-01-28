@@ -13,6 +13,7 @@ import {
   query,
   updateDoc,
   setDoc,
+  where,
 } from "firebase/firestore";
 import { orderConverter } from "./converter";
 
@@ -48,11 +49,15 @@ export const deleteOrders = async (ids: string[]) => {
 
 export const listenForOrders = (
   cb: (docs: QuerySnapshot<Order, Order>) => void
-) =>
-  onSnapshot(
+) => {
+  const today = new Date();
+  today.setHours(0, 0, 0);
+  return onSnapshot(
     query(
       collection(db, "orders").withConverter(orderConverter),
-      orderBy("timestamp", "asc")
+      orderBy("timestamp", "asc"),
+      where("timestamp", ">=", today)
     ),
     cb
   );
+};

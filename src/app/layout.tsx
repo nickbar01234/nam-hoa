@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Open_Sans, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 const robotoMono = Roboto_Mono({
   subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${robotoMono.variable} ${openSans.variable} antialiased h-screen w-screen`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

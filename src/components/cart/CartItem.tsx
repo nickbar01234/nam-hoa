@@ -42,7 +42,7 @@ const CartItem = ({ item, editable }: CartItemProps) => {
           <span>{formatPriceInVnd(menuItem.price * item.quantity)}</span>
         </div>
       </div>
-      {editable && (
+      {editable ? (
         <div className="self-end flex gap-x-4 items-center">
           <Button
             className="rounded-full h-8 w-8 bg-[#F5F5F5] border-[1px] border-[#D1D1D1] text-[#000000DE] transition duration-300 ease-in-out disabled:bg-[#E0E0E0] disabled:border-[#B1B1B1] disabled:text-[#B1B1B1] disabled:cursor-not-allowed"
@@ -59,6 +59,10 @@ const CartItem = ({ item, editable }: CartItemProps) => {
           >
             <FontAwesomeIcon icon={faPlus} color="#000000DE" />
           </Button>
+        </div>
+      ) : (
+        <div className="self-end text-[#00000099]">
+          Số lượng: {item.quantity}
         </div>
       )}
     </div>

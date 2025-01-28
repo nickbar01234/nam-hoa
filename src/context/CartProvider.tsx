@@ -10,7 +10,6 @@ import React from "react";
 
 interface CartProviderProps {
   children?: React.ReactNode;
-  table: string;
   cart?: Cart;
   onSubmit: (cart: Cart) => void;
 }
@@ -28,7 +27,6 @@ const cartProviderContext = React.createContext({} as CartProviderContext);
 const Provider = cartProviderContext.Provider;
 const CartProvider = ({
   children,
-  table,
   cart: providedCart,
   onSubmit,
 }: CartProviderProps) => {

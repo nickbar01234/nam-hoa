@@ -12,13 +12,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 import CartProvider from "@/context/CartProvider";
 import Menu from "@/components/menu";
 import Header from "@/components/layout/Header";
 import Cart from "@/components/cart";
 import { setOrder } from "@/db";
 import React from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface OrderControllerProps {
   order: IdentifiableOrder;
@@ -26,13 +26,20 @@ interface OrderControllerProps {
 
 const InProgressOrderController = ({ order }: OrderControllerProps) => {
   const { cart } = order;
+  const { toast } = useToast();
+
   return (
     <CartProvider
-      table={order.table}
       cart={cart}
-      onSubmit={(cart) =>
-        setOrder({ ...order, status: OrderStatus.DONE, cart })
-      }
+      onSubmit={(cart) => {
+        setOrder({ ...order, status: OrderStatus.DONE, cart });
+        toast({
+          className:
+            "fixed m-auto inset-0 h-fit w-fit bg-[#11763D] text-white flex justify-center text-2xl",
+          description: "Bạn đã xác nhận món thành công!",
+          duration: 2000,
+        });
+      }}
     >
       <div className="relative">
         <div className="flex flex-col gap-y-4 h-full">
@@ -70,11 +77,7 @@ const DetailViewOrderController = ({ order }: OrderControllerProps) => {
         <FontAwesomeIcon icon={faMagnifyingGlass} />
       </p>
       <div className="hidden">
-        <CartProvider
-          table={order.table}
-          cart={cart}
-          onSubmit={(_cart) => Promise.resolve()}
-        >
+        <CartProvider cart={cart} onSubmit={(_cart) => Promise.resolve()}>
           <Cart
             submitLabel="Xác nhận đơn"
             leftIcon={
